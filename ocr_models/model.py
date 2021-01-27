@@ -32,7 +32,7 @@ from tensorflow.contrib.slim.nets import inception
 
 import utils
 
-from ocr_models import metrics, sequence_layers
+import metrics, sequence_layers
 
 OutputEndpoints = collections.namedtuple('OutputEndpoints', [
     'chars_logit', 'chars_log_prob', 'predicted_chars', 'predicted_scores',

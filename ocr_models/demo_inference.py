@@ -22,7 +22,7 @@ import tensorflow as tf
 from tensorflow.python.platform import flags
 from tensorflow.python.training import monitored_session
 
-from ocr_models import common_flags, data_provider, datasets
+import common_flags, data_provider, datasets
 
 FLAGS = flags.FLAGS
 common_flags.define()

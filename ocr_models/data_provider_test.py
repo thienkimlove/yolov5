@@ -19,7 +19,7 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.contrib.slim import queues
 
-from ocr_models import datasets, data_provider
+import datasets, data_provider
 
 
 class DataProviderTest(tf.test.TestCase):

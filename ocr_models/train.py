@@ -27,7 +27,7 @@ from tensorflow.python.platform import flags
 from tensorflow.contrib.tfprof import model_analyzer
 
 
-from ocr_models import data_provider, common_flags
+import data_provider, common_flags
 
 FLAGS = flags.FLAGS
 common_flags.define()

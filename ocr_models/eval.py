@@ -23,7 +23,7 @@ from tensorflow.contrib import slim
 from tensorflow import app
 from tensorflow.python.platform import flags
 
-from ocr_models import common_flags, data_provider
+import common_flags, data_provider
 
 FLAGS = flags.FLAGS
 common_flags.define()

@@ -19,8 +19,8 @@ import sys
 
 from tensorflow.python.platform import flags
 
-from ocr_models import model, datasets
-from ocr_models.datasets import quandm
+import model, datasets
+from datasets import quandm
 
 FLAGS = flags.FLAGS
 

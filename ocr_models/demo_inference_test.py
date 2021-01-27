@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 import os
-from ocr_models import demo_inference
+import demo_inference
 import tensorflow as tf
 from tensorflow.python.training import monitored_session
 
