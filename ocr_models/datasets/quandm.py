@@ -22,6 +22,7 @@ import tensorflow as tf
 from tensorflow.contrib import slim
 import logging
 
+#DEFAULT_DATASET_DIR = '/Users/tieungao/Codes/python/ai-research/yolov5/datav2'
 DEFAULT_DATASET_DIR = '/content/yolov5/datav2'
 
 # The dataset configuration, should be used only as a default value.
