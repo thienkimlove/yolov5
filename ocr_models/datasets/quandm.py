@@ -22,8 +22,8 @@ import tensorflow as tf
 from tensorflow.contrib import slim
 import logging
 
-#DEFAULT_DATASET_DIR = '/Users/tieungao/Codes/python/ai-research/yolov5/datav2'
-DEFAULT_DATASET_DIR = '/content/yolov5/datav2'
+DEFAULT_DATASET_DIR = '/Users/tieungao/Codes/python/ai-research/yolov5/datav2'
+# DEFAULT_DATASET_DIR = '/content/yolov5/datav2'
 
 # The dataset configuration, should be used only as a default value.
 DEFAULT_CONFIG = {
@@ -43,6 +43,7 @@ DEFAULT_CONFIG = {
         }
     },
     'charset_filename': 'charset-label.txt',
+    'charset_file': 'charset-label.txt',
     'image_shape': (400, 400, 3),
     'num_of_views': 1,
     'max_sequence_length': 20,
@@ -178,6 +179,7 @@ def get_split(split_name, dataset_dir=None, config=None):
       items_to_descriptions=config['items_to_descriptions'],
       #  additional parameters for convenience.
       charset=charset,
+      charset_file=charset_file,
       num_char_classes=len(charset),
       image_shape=config['image_shape'],
       num_of_views=config['num_of_views'],

@@ -28,7 +28,7 @@ from tensorflow.contrib import slim
 #      shape=[batch_size x seq_length];
 #    labels_one_hot: labels in one-hot encoding,
 #      shape [batch_size x seq_length x num_char_classes];
-import inception_preprocessing
+from ocr_models import inception_preprocessing
 
 InputEndpoints = collections.namedtuple(
     'InputEndpoints', ['images', 'images_orig', 'labels', 'labels_one_hot'])

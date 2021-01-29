@@ -22,13 +22,13 @@ import tensorflow as tf
 from tensorflow.python.platform import flags
 from tensorflow.python.training import monitored_session
 
-import common_flags, data_provider, datasets
+from ocr_models import common_flags, data_provider, datasets
 
 FLAGS = flags.FLAGS
 common_flags.define()
 
 # e.g. ./datasets/data/fsns/temp/fsns_train_%02d.png
-flags.DEFINE_string('image_path_pattern', '',
+flags.DEFINE_string('image_path_pattern', '/Users/tieungao/Codes/python/ai-research/yolov5/test/%02d.png',
                     'A file pattern with a placeholder for the image index.')
 
 
@@ -78,8 +78,17 @@ def run(checkpoint, batch_size, dataset_name, image_path_pattern):
       checkpoint_filename_with_path=checkpoint)
   with monitored_session.MonitoredSession(
           session_creator=session_creator) as sess:
+
+    print(endpoints.predicted_text)
     predictions = sess.run(endpoints.predicted_text,
                            feed_dict={images_placeholder: images_data})
+
+    print(images_placeholder)
+    print(images_data)
+
+    op = sess.graph.get_operations()
+    # for o in op:
+    #     print(o.name)
   return [pr_bytes.decode('utf-8') for pr_bytes in predictions.tolist()]
 
 

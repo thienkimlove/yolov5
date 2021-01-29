@@ -1,3 +1,4 @@
+import PIL
 import argparse
 import time
 
@@ -11,7 +12,11 @@ import torch
 import torch.backends.cudnn as cudnn
 from numpy import random
 import numpy as np
+import tensorflow as tf
+from tensorflow_core.python.training import monitored_session
 
+import tensor
+from ocr_models import common_flags, datasets, data_provider
 from reco.recognition import E2E
 import time
 
@@ -71,7 +76,12 @@ def match_license(lp_str):
     if not is_match:
         return None
     else:
-        return " ".join(is_match)
+        chars = " ".join(is_match)
+
+        if len(chars) == 7:
+            return "{} {}".format(chars[:3], chars[3:])
+        else:
+            return "{}-{}.{}".format(chars[:3], chars[3:6], chars[6:])
 
 
 # this should be pixel instead of percent point 0-1
@@ -137,6 +147,7 @@ def deskew(image):
 def match_template(image, template):
     return cv2.matchTemplate(image, template, cv2.TM_CCOEFF_NORMED)
 
+
 vehicle_model_path = '/Users/tieungao/Codes/python/ai-research/openvino-latest/models/downloaded/intel/vehicle-detection-0202/FP32/vehicle-detection-0202'
 
 # Load the model
@@ -146,7 +157,7 @@ video_path = '/Users/tieungao/Codes/python/ai-research/openvino-latest/samples/s
 
 # tensorflow ano
 
-ano_file = 'gen_data/annot_file.csv'
+ano_file = 'gen_datav2/annot_file.csv'
 
 reco_model = E2E()
 
@@ -190,6 +201,20 @@ imgsz = check_img_size(imgsz, s=model.stride.max())  # check img_size
 if half:
     model.half()  # to FP16
 number_unique = 0
+
+
+batch_size = 1
+dataset_name = 'quandm'
+checkpoint = '/Users/tieungao/Codes/python/ai-research/yolov5/ocr52/model.ckpt-60404'
+tf.compat.v1.reset_default_graph()
+images_placeholder, endpoints = tensor.create_model(batch_size, dataset_name)
+
+session_creator = monitored_session.ChiefSessionCreator(
+  checkpoint_filename_with_path=checkpoint)
+sess = monitored_session.MonitoredSession(
+      session_creator=session_creator)
+
+
 while cap.isOpened():
     ret, frame_origin = cap.read()
     if not ret:
@@ -318,6 +343,25 @@ while cap.isOpened():
                         except Exception:
                             label1 = None
 
+                        im0s2 = cv2.resize(im0s, (400, 400))
+
+                        # label2 = tensorflow_run(im0s2)
+
+                        images_data = tensor.load_images(im0s2, batch_size, dataset_name)
+
+                        predictions = sess.run(endpoints.predicted_text,
+                                               feed_dict={images_placeholder: images_data})
+
+                        # print(images_placeholder)
+                        # print(images_data)
+
+                        # op = sess.graph.get_operations()
+                        # for o in op:
+                        #     print(o.name)
+                        is_list = [pr_bytes.decode('utf-8') for pr_bytes in predictions.tolist()]
+
+                        label2 = " ".join(is_list)
+
                         # gray = get_grayscale(im1s)
                         # thresh_img = thresholding(gray)
                         # opening_img = opening(gray)
@@ -331,13 +375,18 @@ while cap.isOpened():
                         #
                         # label = '{}|{}|{}|{}'.format(label_origin, label_thresh, label_opening, label_canny)
                         reco_detect = "reco detect = {}".format(label1)
+                        tensor_detect = "tensor detect = {}".format(label2)
                         label = cleanup_image(im1s)
                         reco_match = match_license(reco_detect)
                         tere_match = match_license(label or "")
+                        tensor_match = match_license(label2 or "")
 
-                        if reco_match or tere_match:
-                            display = reco_match if reco_match else tere_match
+                        if reco_match or tere_match or tensor_match:
+                            display = reco_match if reco_match else tensor_match if tensor_match else tere_match
                             print("display={}".format(display))
+
+                            if tensor_match:
+                                print("From tensor_match")
 
                             # to 200x200
 
@@ -345,8 +394,8 @@ while cap.isOpened():
                             # cv2.imshow("resized", resized)
 
                             count += 1
-                            cv2.imwrite('gen_data/images/{}.png'.format(count), im0s)
-                            cv2.imwrite('gen_data/crops/{}.png'.format(count), im1s)
+                            cv2.imwrite('gen_datav2/images/{}.png'.format(count), im0s)
+                            cv2.imwrite('gen_datav2/crops/{}.png'.format(count), im1s)
 
                             # List
                             insert_str = [count, count, '{}.png'.format(count), display, lxmin, lymin, lxmax, lymax]

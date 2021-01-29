@@ -266,4 +266,7 @@ models
 openvino
 reco
 yolov5*.pt
+ocr5
+ocr52
+export_models
 

@@ -19,8 +19,8 @@ import sys
 
 from tensorflow.python.platform import flags
 
-import model, datasets
-from datasets import quandm
+from ocr_models import model, datasets
+from ocr_models.datasets import quandm
 
 FLAGS = flags.FLAGS
 
@@ -129,7 +129,7 @@ def get_crop_size():
 
 
 def create_dataset(split_name):
-  ds_module = getattr(datasets, FLAGS.dataset_name)
+  # ds_module = getattr(datasets, FLAGS.dataset_name)
   return quandm.get_split(split_name, dataset_dir=FLAGS.dataset_dir)
 
 

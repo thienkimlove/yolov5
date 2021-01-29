@@ -27,13 +27,13 @@ from tensorflow import app
 from tensorflow.contrib import slim
 from tensorflow.python.platform import flags
 
-import common_flags
-import model_export_lib
+from ocr_models import common_flags
+from ocr_models import model_export_lib
 
 FLAGS = flags.FLAGS
 common_flags.define()
 
-flags.DEFINE_string('export_dir', None, 'Directory to export model files to.')
+flags.DEFINE_string('export_dir', '/Users/tieungao/Codes/python/ai-research/yolov5/export_models/v2', 'Directory to export model files to.')
 flags.DEFINE_integer(
     'image_width', None,
     'Image width used during training (or crop width if used)'
@@ -99,6 +99,9 @@ def export_model(export_dir,
   """
   # Dataset object used only to get all parameters for the model.
   dataset = common_flags.create_dataset(split_name='test')
+
+  print(dataset.image_shape)
+
   model = common_flags.create_model(
       dataset.num_char_classes,
       dataset.max_sequence_length,
