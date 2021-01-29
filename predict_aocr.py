@@ -3,7 +3,7 @@ from tensorflow.python.platform import gfile
 import numpy as np
 import cv2
 
-file_to_predict = 'gen_data/crops/1.png'
+file_to_predict = '/content/drive/MyDrive/datasets/samples/orc2/crops/558.png'
 
 path_to_pb = 'exported-model/frozen_graph.pb'
 
