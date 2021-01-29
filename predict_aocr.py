@@ -15,7 +15,7 @@ def getImage(path):
 
 
 with tf.Graph().as_default() as graph:
-    with tf.Session() as sess:
+    with tf.Session(config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=True)) as sess:
         with tf.gfile.GFile(path_to_pb, "rb") as f:
 
             graph_def = tf.GraphDef()
