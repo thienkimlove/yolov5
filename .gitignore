@@ -269,4 +269,6 @@ yolov5*.pt
 ocr5
 ocr52
 export_models
+exported-model
+exported-model-save
 
