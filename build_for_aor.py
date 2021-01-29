@@ -75,6 +75,7 @@ with open(ano_file, "r") as f:
             lst = line[0].split(',')
             number_order = lst[1]
             label = lst[3]
+            label = re.sub(r'\W+', '', label)
             if int(number_order) < 700:
                 append_list_to_csv(new_train_txt, ['gen_data/crops/{}.png {}'.format(number_order, label)])
 
